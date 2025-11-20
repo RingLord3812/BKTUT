@@ -1,0 +1,36 @@
+// models/TutorSlot.js
+const { DataTypes } = require('sequelize');
+const { sequelize } = require('../config/database');
+
+const TutorSlot = sequelize.define('TutorSlot', {
+  slot_id: {
+    type: DataTypes.INTEGER,
+    primaryKey: true,
+    autoIncrement: true
+  },
+  tutor_user_id: {
+    type: DataTypes.STRING,
+    allowNull: false
+  },
+  subject_id: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
+  start_time: {
+    type: DataTypes.DATE, // MySQL DATETIME maps to Sequelize DATE
+    allowNull: false
+  },
+  end_time: {
+    type: DataTypes.DATE,
+    allowNull: false
+  },
+  is_booked: {
+    type: DataTypes.BOOLEAN,
+    defaultValue: false
+  }
+}, {
+  tableName: 'tutor_slots',
+  timestamps: false
+});
+
+module.exports = TutorSlot;

@@ -1,0 +1,30 @@
+{
+  "name": "bktut",
+  "version": "1.0.0",
+  "description": "Project Bài tập lớn CNPM_HCMUT_K23_HK251",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/demon-killer7/BKTUT.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/demon-killer7/BKTUT/issues"
+  },
+  "homepage": "https://github.com/demon-killer7/BKTUT#readme",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mysql2": "^3.15.3",
+    "sequelize": "^6.37.7"
+  }
+}
