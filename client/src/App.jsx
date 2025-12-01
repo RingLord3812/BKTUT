@@ -2,8 +2,11 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
+import LoginPage from './pages/LoginPage';
+import TutorHomePage from './pages/TutorHomePage';
 import StudentProfilePage from './pages/StudentProfilePage';
 import ChatPage from './pages/ChatPage';
+import CourseDetailPage from './pages/CourseDetailPage';
 
 // --- Local Components for Dashboard (Legacy) ---
 const CourseCard = ({ course }) => {
@@ -75,9 +78,12 @@ const Dashboard = () => {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<Dashboard />} />
+      <Route path="/" element={<LoginPage />} />
+      <Route path="/student-home" element={<Dashboard />} />
+      <Route path="/tutor-home" element={<TutorHomePage />} />
       <Route path="/profile" element={<StudentProfilePage />} />
       <Route path="/chat" element={<ChatPage />} />
+      <Route path="/course/:id" element={<CourseDetailPage />} />
     </Routes>
   );
 }

@@ -2,14 +2,15 @@ import React from 'react';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { KeyboardArrowRight } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 const StudentProfilePage = () => {
   const currentCourses = [
-    { id: 1, code: 'CNPM', name: 'Công nghệ Phần mềm', tutor: 'Nguyễn Văn A', progress: 80 },
-    { id: 2, code: 'MMT', name: 'Mạng Máy Tính', tutor: 'Trần Thị B', progress: 65 },
-    { id: 3, code: 'CSDL', name: 'Cơ Sở Dữ Liệu', tutor: 'Lê Văn C', progress: 40 },
-    { id: 4, code: 'CTDL', name: 'Cấu Trúc Dữ Liệu', tutor: 'Phạm Thị D', progress: 90 },
-    { id: 5, code: 'HĐC', name: 'Hóa đại cương', tutor: 'Bùm bùm', progress: 80 },
+    { id: 'cong-nghe-phan-mem', code: 'CNPM', name: 'Công nghệ Phần mềm', tutor: 'UIA', progress: 80 },
+    { id: 'mang-may-tinh', code: 'MMT', name: 'Mạng Máy Tính', tutor: 'Ew', progress: 65 },
+    { id: 'he-co-so-du-lieu', code: 'CSDL', name: 'Hệ cơ sở dữ liệu', tutor: 'O^i', progress: 40 },
+    { id: 'do-an-cnpm', code: 'ĐA', name: 'Đồ án tổng hợp - CNPM', tutor: 'Á', progress: 90 },
+    { id: 'hoa-dai-cuong', code: 'HĐC', name: 'Hóa đại cương', tutor: 'Bùm bùm', progress: 80 },
   ];
 
   return (
@@ -75,9 +76,9 @@ const StudentProfilePage = () => {
                     {/* Bottom Row */}
                     <div className="flex justify-between items-end">
                       <span className="text-xs opacity-70">Cập nhật mới nhất</span>
-                      <button className="bg-white text-blue-700 font-semibold text-sm rounded-lg px-4 py-2 hover:bg-gray-100 transition-colors">
+                      <Link to={`/course/${course.id}`} className="bg-white text-blue-700 font-semibold text-sm rounded-lg px-4 py-2 hover:bg-gray-100 transition-colors">
                         Vào học
-                      </button>
+                      </Link>
                     </div>
                   </div>
                 ))}

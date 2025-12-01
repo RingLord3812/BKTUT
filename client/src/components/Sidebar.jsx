@@ -6,7 +6,7 @@ const Sidebar = () => {
   const location = useLocation();
   
   const menuItems = [
-    { icon: <Home />, label: 'Trang Chủ', path: '/' },
+    { icon: <Home />, label: 'Trang Chủ', path: '/student-home' },
     { icon: <Person />, label: 'Thông Tin Sinh Viên', path: '/profile' },
     { icon: <School />, label: 'Khóa Học Của Tôi', path: '/my-courses' },
     { icon: <CalendarToday />, label: 'Lịch học', path: '/schedule' },
