@@ -4,6 +4,8 @@ import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
   const location = useLocation();
+  const user = JSON.parse(localStorage.getItem('currentUser')) || { fullName: 'Khách', mssv: '---' };
+  const initials = user.fullName ? user.fullName.split(' ').map(n => n[0]).join('').slice(-2).toUpperCase() : '??';
   
   const menuItems = [
     { icon: <Home />, label: 'Trang Chủ', path: '/student-home' },
@@ -24,11 +26,11 @@ const Sidebar = () => {
       {/* User Profile Summary */}
       <div className="flex flex-col items-center mt-8 mb-8">
         <div className="w-20 h-20 rounded-full bg-gray-200 border-4 border-white/20 flex items-center justify-center text-blue-800 font-bold text-2xl mb-3 shadow-md">
-          NQ
+          {initials}
         </div>
         <div className="text-center">
-          <div className="font-bold text-lg">TTT</div>
-          <div className="text-sm text-blue-200 bg-blue-800/50 px-3 py-0.5 rounded-full mt-1 inline-block">36</div>
+          <div className="font-bold text-lg">{user.fullName}</div>
+          <div className="text-sm text-blue-200 bg-blue-800/50 px-3 py-0.5 rounded-full mt-1 inline-block">{user.mssv || 'N/A'}</div>
         </div>
       </div>
 
