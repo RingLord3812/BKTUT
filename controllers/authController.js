@@ -9,6 +9,25 @@ const login = async (req, res) => {
     const { username, password } = req.body;
     console.log("Đang đăng nhập:", username); // Log để debug
 
+    // --- HARDCODED TEST USERS (Bypass DB) ---
+    if (username === 'student_test' && password === '123456') {
+        const token = jwt.sign(
+            { userId: 'student_test_id', role: 'student' }, 
+            process.env.JWT_SECRET || 'secret',
+            { expiresIn: '1d' }
+        );
+        return res.json({ success: true, message: 'Login (Test Mode)', token, role: 'student' });
+    }
+    if (username === 'tutor_test' && password === '123456') {
+        const token = jwt.sign(
+            { userId: 'tutor_test_id', role: 'tutor' }, 
+            process.env.JWT_SECRET || 'secret',
+            { expiresIn: '1d' }
+        );
+        return res.json({ success: true, message: 'Login (Test Mode)', token, role: 'tutor' });
+    }
+    // ----------------------------------------
+
     // 1. Tìm user
     const user = await User.findOne({ where: { username } });
     if (!user) return res.status(401).json({ message: 'Username không tồn tại!' });

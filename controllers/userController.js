@@ -9,6 +9,35 @@ const getMe = async (req, res) => {
 
     console.log(`🔍 Đang lấy thông tin cho User ID: ${userId}, Role: ${role}`);
 
+    // --- HARDCODED TEST USER DATA (Bypass DB) ---
+    if (userId === 'student_test_id') {
+        return res.json({
+            success: true,
+            data: {
+                user_id: 'student_test_id',
+                username: 'student_test',
+                full_name: 'Test Student (Local)',
+                email: 'student@test.local',
+                phone_num: '0123456789',
+                studentProfile: { grade_level: 12, school: 'High School Test' }
+            }
+        });
+    }
+    if (userId === 'tutor_test_id') {
+        return res.json({
+            success: true,
+            data: {
+                user_id: 'tutor_test_id',
+                username: 'tutor_test',
+                full_name: 'Test Tutor (Local)',
+                email: 'tutor@test.local',
+                phone_num: '0987654321',
+                tutorProfile: { bio: 'I am a test tutor.', hourly_rate: 200000 }
+            }
+        });
+    }
+    // --------------------------------------------
+
     let includeOption = [];
     
     // Nếu là student thì lấy kèm StudentProfile, tutor thì lấy TutorProfile
