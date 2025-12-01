@@ -7,6 +7,7 @@ import TutorHomePage from './pages/TutorHomePage';
 import StudentProfilePage from './pages/StudentProfilePage';
 import ChatPage from './pages/ChatPage';
 import CourseDetailPage from './pages/CourseDetailPage';
+import LessonPage from './pages/LessonPage';
 
 // --- Local Components for Dashboard (Legacy) ---
 const CourseCard = ({ course }) => {
@@ -84,6 +85,7 @@ export default function App() {
       <Route path="/profile" element={<StudentProfilePage />} />
       <Route path="/chat" element={<ChatPage />} />
       <Route path="/course/:id" element={<CourseDetailPage />} />
+      <Route path="/course/:id/lesson" element={<LessonPage />} />
     </Routes>
   );
 }

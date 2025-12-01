@@ -1,5 +1,5 @@
 import React from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Send as SendIcon, KeyboardArrowRight } from '@mui/icons-material';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
@@ -69,9 +69,9 @@ const CourseDetailPage = () => {
                     </div>
                     
                     {/* Action */}
-                    <button className="bg-white text-blue-600 font-semibold rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors">
+                    <Link to={`/course/${id}/lesson`} className="bg-white text-blue-600 font-semibold rounded-lg px-4 py-2 hover:bg-gray-50 transition-colors">
                       Vào học
-                    </button>
+                    </Link>
                   </div>
                 ))}
               </div>
