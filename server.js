@@ -34,4 +34,5 @@ app.get('/', (req, res) => {
 // === Start Server ===
 app.listen(PORT, () => {
   console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`👉 Test Mode: ON (User: student_test / 123456)`);
 });

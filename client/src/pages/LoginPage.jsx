@@ -3,26 +3,38 @@ import React, { useState } from 'react';
 import { 
   Box, Card, CardActionArea, Typography, 
   Dialog, DialogTitle, DialogContent, DialogActions, 
-  TextField, Button, Alert 
+  TextField, Button, Alert, Stack
 } from '@mui/material';
-import SchoolIcon from '@mui/icons-material/School';
-import PersonIcon from '@mui/icons-material/Person';
-import AdminPanelSettingsIcon from '@mui/icons-material/AdminPanelSettings';
 import { useNavigate } from 'react-router-dom';
-import axiosClient from '../api/axiosClient'; // Import API client
+import axiosClient from '../api/axiosClient';
 
-// Component thẻ chọn vai trò (Giữ nguyên)
-const RoleCard = ({ icon, title, subtitle, onClick }) => (
-  <Card sx={{ mb: 2, borderRadius: 2, boxShadow: 3 }}>
-    <CardActionArea onClick={onClick} sx={{ p: 2 }}>
-      <Box display="flex" alignItems="center">
-        <Box sx={{ mr: 2, color: 'primary.main' }}>{icon}</Box>
-        <Box>
-          <Typography variant="h6" fontWeight="bold">{title}</Typography>
-          <Typography variant="body2" color="text.secondary">{subtitle}</Typography>
-        </Box>
-      </Box>
-    </CardActionArea>
+// Component thẻ chọn vai trò mới
+const RoleOption = ({ title, description, onClick }) => (
+  <Card 
+    onClick={onClick}
+    sx={{ 
+      mb: 2, 
+      borderRadius: 2, 
+      border: '1px solid',
+      borderColor: 'grey.200',
+      boxShadow: 'none',
+      transition: 'all 0.2s ease-in-out',
+      '&:hover': {
+        borderColor: 'primary.main',
+        boxShadow: 2,
+        cursor: 'pointer',
+        transform: 'translateY(-2px)'
+      }
+    }}
+  >
+    <Box sx={{ p: 2 }}>
+      <Typography variant="subtitle1" fontWeight="bold" color="text.primary">
+        {title}
+      </Typography>
+      <Typography variant="body2" color="text.secondary">
+        {description}
+      </Typography>
+    </Box>
   </Card>
 );
 
@@ -44,14 +56,14 @@ const LoginPage = () => {
     setOpen(true);
     setError('');
     // Reset form form
-    if (role === 'student') setUsername('student_demo'); // Gợi ý sẵn cho dễ test
-    else if (role === 'tutor') setUsername('tutor_demo');
+    if (role === 'student') setUsername('student_test'); 
+    else if (role === 'tutor') setUsername('tutor_test');
+    else setUsername('');
     setPassword(''); 
   };
 
   // Khi bấm nút "Đăng nhập" trong Modal
   const handleLoginSubmit = async () => {
-    console.log("🟢 Nút đã được bấm! Đang chuẩn bị gọi API...");
     try {
       // Gọi API Backend thật
       const response = await axiosClient.post('/auth/login', {
@@ -61,71 +73,106 @@ const LoginPage = () => {
 
       const { token, role } = response.data;
 
-      // Kiểm tra xem user có đăng nhập đúng vai trò mình chọn không
-      // (Ví dụ: Acc Tutor mà lại bấm vào thẻ Student thì nên chặn hoặc cảnh báo)
       if (role !== selectedRole) {
         setError(`Tài khoản này là ${role}, vui lòng chọn đúng thẻ!`);
         return;
       }
 
-      // Lưu Token vào LocalStorage
       localStorage.setItem('access_token', token);
       localStorage.setItem('role', role);
 
-      // Chuyển hướng
-      alert('Đăng nhập thành công!');
       setOpen(false);
       if (role === 'student') navigate('/student-home');
       else if (role === 'tutor') navigate('/tutor-home');
 
     } catch (err) {
       console.error(err);
-      // Hiển thị lỗi từ Backend trả về
       setError(err.response?.data?.message || 'Đăng nhập thất bại!');
     }
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', bgcolor: '#f0f2f5', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Card sx={{ p: 4, width: 400, textAlign: 'center', borderRadius: 4 }}>
-        <Typography variant="h5" fontWeight="bold" gutterBottom>BK Tutor</Typography>
-        <Typography variant="body2" color="text.secondary" sx={{ mb: 4 }}>Chọn vai trò để đăng nhập</Typography>
+    <Box 
+      sx={{ 
+        minHeight: '100vh', 
+        bgcolor: '#E6F2FF', // Xanh dương pastel
+        display: 'flex', 
+        alignItems: 'center', 
+        justifyContent: 'center',
+        p: 2
+      }}
+    >
+      <Card 
+        sx={{ 
+          width: '100%',
+          maxWidth: 450, 
+          p: 5, 
+          borderRadius: 4, // rounded-2xl
+          boxShadow: 6, // shadow-xl
+          bgcolor: 'white'
+        }}
+      >
+        {/* Header */}
+        <Box sx={{ textAlign: 'center', mb: 4 }}>
+          <Typography variant="h4" fontWeight="bold" color="text.primary" gutterBottom>
+            BK Tutor
+          </Typography>
+          <Typography variant="body1" color="text.secondary">
+            Chọn vai trò của bạn để tiếp tục
+          </Typography>
+        </Box>
 
-        <RoleCard 
-          icon={<PersonIcon fontSize="large"/>} 
-          title="Sinh Viên" subtitle="Học viên" 
-          onClick={() => handleCardClick('student')} 
-        />
-        <RoleCard 
-          icon={<SchoolIcon fontSize="large"/>} 
-          title="Tutor" subtitle="Gia sư" 
-          onClick={() => handleCardClick('tutor')} 
-        />
-         <RoleCard 
-          icon={<AdminPanelSettingsIcon fontSize="large"/>} 
-          title="Admin" subtitle="Quản trị" 
-          onClick={() => alert('Chưa làm!')} 
-        />
+        {/* Danh sách lựa chọn */}
+        <Box>
+          <RoleOption 
+            title="Sinh Viên" 
+            description="Học viên tham gia khóa học" 
+            onClick={() => handleCardClick('student')} 
+          />
+          <RoleOption 
+            title="Tutor" 
+            description="Gia sư hướng dẫn học tập" 
+            onClick={() => handleCardClick('tutor')} 
+          />
+          <RoleOption 
+            title="Quản trị viên" 
+            description="Phòng giáo vụ và ban giám hiệu nhà trường" 
+            onClick={() => alert('Chức năng dành cho Admin chưa được kích hoạt.')} 
+          />
+        </Box>
+
+        {/* Footer */}
+        <Box sx={{ mt: 4, textAlign: 'center' }}>
+          <Typography variant="caption" display="block" color="text.disabled">
+            Hệ thống học tập trực tuyến BK Tutor
+          </Typography>
+          <Typography variant="caption" display="block" color="text.disabled">
+            © 2024 BK Tutor. All rights reserved.
+          </Typography>
+        </Box>
       </Card>
 
       {/* === MODAL (POPUP) ĐĂNG NHẬP === */}
-      <Dialog open={open} onClose={() => setOpen(false)}>
-        <DialogTitle>Đăng nhập: {selectedRole === 'student' ? 'Sinh Viên' : 'Tutor'}</DialogTitle>
-        <DialogContent sx={{ width: 400 }}>
+      <Dialog open={open} onClose={() => setOpen(false)} maxWidth="xs" fullWidth>
+        <DialogTitle sx={{ fontWeight: 'bold' }}>
+          Đăng nhập: {selectedRole === 'student' ? 'Sinh Viên' : 'Tutor'}
+        </DialogTitle>
+        <DialogContent>
           {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
           
           <TextField
             autoFocus
             margin="dense"
-            label="Username"
+            label="Tên đăng nhập"
             fullWidth
             variant="outlined"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
+            sx={{ mb: 2 }}
           />
           <TextField
             margin="dense"
-            label="Password"
+            label="Mật khẩu"
             type="password"
             fullWidth
             variant="outlined"
@@ -133,9 +180,11 @@ const LoginPage = () => {
             onChange={(e) => setPassword(e.target.value)}
           />
         </DialogContent>
-        <DialogActions>
-          <Button onClick={() => setOpen(false)}>Hủy</Button>
-          <Button onClick={handleLoginSubmit} variant="contained">Đăng nhập</Button>
+        <DialogActions sx={{ p: 3, pt: 0 }}>
+          <Button onClick={() => setOpen(false)} color="inherit">Hủy</Button>
+          <Button onClick={handleLoginSubmit} variant="contained" disableElevation>
+            Đăng nhập
+          </Button>
         </DialogActions>
       </Dialog>
     </Box>

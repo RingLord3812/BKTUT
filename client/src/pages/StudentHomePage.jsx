@@ -1,17 +1,17 @@
 // client/src/pages/StudentHomePage.jsx
 import React, { useEffect, useState } from 'react';
-import { Grid, Card, CardContent, Typography, Button, Chip, Box, Alert, Container } from '@mui/material';
 import axiosClient from '../api/axiosClient';
+import Sidebar from '../components/Sidebar';
+import Header from '../components/Header';
+import CourseCard from '../components/CourseCard';
 
 const StudentHomePage = () => {
   const [slots, setSlots] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // 1. Hàm gọi API lấy danh sách lớp
   const fetchSlots = async () => {
     try {
-      // Gọi về Backend: GET /schedule/slots
       const response = await axiosClient.get('/schedule/slots');
       setSlots(response.data.data);
     } catch (err) {
@@ -22,77 +22,73 @@ const StudentHomePage = () => {
     }
   };
 
-  // Chạy hàm này 1 lần khi trang vừa mở
   useEffect(() => {
     fetchSlots();
   }, []);
 
-  // 2. Hàm xử lý Đặt lịch
   const handleBooking = async (slotId) => {
     if (!window.confirm('Bạn có chắc muốn đăng ký lớp này không?')) return;
 
     try {
-      // Gọi về Backend: POST /schedule/bookings
       await axiosClient.post('/schedule/bookings', {
         tutor_slot_id: slotId
       });
       alert('✅ Đăng ký thành công!');
-      fetchSlots(); // Load lại danh sách để ẩn lớp vừa đặt đi
+      fetchSlots();
     } catch (err) {
       alert('❌ Đăng ký thất bại: ' + (err.response?.data?.message || 'Lỗi server'));
     }
   };
 
-  if (loading) return <Typography>Đang tải dữ liệu...</Typography>;
-
   return (
-    <Container>
-      <Typography variant="h4" fontWeight="bold" mb={3} color="primary">
-        Các khóa học đang mở
-      </Typography>
-      
-      {error && <Alert severity="error" sx={{ mb: 2 }}>{error}</Alert>}
+    <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
+      {/* Sidebar */}
+      <Sidebar />
 
-      {slots.length === 0 ? (
-        <Alert severity="info">Hiện tại không có lớp nào rảnh. Hãy quay lại sau!</Alert>
-      ) : (
-        <Grid container spacing={3}>
-          {slots.map((slot) => (
-            <Grid item xs={12} md={6} key={slot.slot_id}>
-              <Card sx={{ borderRadius: 3, boxShadow: 3, display: 'flex', justifyContent: 'space-between', p: 2 }}>
-                <Box>
-                  <Chip label={slot.subject.subject_code} color="primary" size="small" sx={{ mb: 1 }} />
-                  <Typography variant="h6" fontWeight="bold">{slot.subject.subject_name}</Typography>
-                  
-                  <Box mt={1}>
-                    <Typography variant="body2" color="text.secondary">
-                      👨‍🏫 Tutor: <b>{slot.tutor.user.full_name}</b>
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      🕒 Bắt đầu: {new Date(slot.start_time).toLocaleString()}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      🏁 Kết thúc: {new Date(slot.end_time).toLocaleString()}
-                    </Typography>
-                  </Box>
-                </Box>
-                
-                <Box display="flex" alignItems="center">
-                  <Button 
-                    variant="contained" 
-                    color="success"
-                    onClick={() => handleBooking(slot.slot_id)}
-                    sx={{ borderRadius: 20, textTransform: 'none', px: 3 }}
-                  >
-                    Đăng ký
-                  </Button>
-                </Box>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      )}
-    </Container>
+      {/* Main Content Wrapper */}
+      <div className="ml-64 flex flex-col min-h-screen transition-all duration-300">
+        {/* Header */}
+        <Header />
+
+        {/* Main Content Area */}
+        <main className="flex-1 p-8">
+          <div className="max-w-6xl mx-auto">
+            <h1 className="text-2xl font-bold text-gray-900 mb-6">Khóa học có thể đăng ký</h1>
+
+            {loading ? (
+              <div className="flex justify-center items-center h-64">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-700"></div>
+              </div>
+            ) : error ? (
+              <div className="bg-red-50 border-l-4 border-red-500 p-4 text-red-700 rounded-r shadow-sm" role="alert">
+                <p className="font-medium">Lỗi!</p>
+                <p>{error}</p>
+              </div>
+            ) : slots.length === 0 ? (
+              <div className="text-center py-16 bg-white rounded-2xl shadow-sm border border-gray-100">
+                <div className="text-gray-300 mb-4">
+                  <svg className="w-16 h-16 mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                  </svg>
+                </div>
+                <p className="text-gray-500 text-lg font-medium">Hiện chưa có khóa học nào để đăng ký.</p>
+                <p className="text-gray-400 text-sm mt-2">Vui lòng quay lại sau.</p>
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {slots.map((slot) => (
+                  <CourseCard 
+                    key={slot.slot_id} 
+                    slot={slot} 
+                    onRegister={handleBooking} 
+                  />
+                ))}
+              </div>
+            )}
+          </div>
+        </main>
+      </div>
+    </div>
   );
 };
 
