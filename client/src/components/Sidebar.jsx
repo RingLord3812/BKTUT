@@ -1,9 +1,10 @@
 import React from 'react';
-import { Home, Person, School, CalendarToday, Settings, Book } from '@mui/icons-material';
-import { Link, useLocation } from 'react-router-dom';
+import { Home, Person, School, CalendarToday, Settings, Book, Logout } from '@mui/icons-material';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 
 const Sidebar = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const user = JSON.parse(localStorage.getItem('currentUser')) || { fullName: 'Khách', mssv: '---' };
   const initials = user.fullName ? user.fullName.split(' ').map(n => n[0]).join('').slice(-2).toUpperCase() : '??';
   
@@ -14,6 +15,13 @@ const Sidebar = () => {
     { icon: <CalendarToday />, label: 'Lịch học', path: '/schedule' },
     { icon: <Settings />, label: 'Cài Đặt', path: '/settings' },
   ];
+
+  const handleLogout = () => {
+    localStorage.removeItem('currentUser');
+    localStorage.removeItem('access_token'); // Clear token if exists
+    localStorage.removeItem('role');
+    navigate('/');
+  };
 
   return (
     <div className="fixed left-0 top-0 h-screen w-64 bg-blue-700 text-white flex flex-col shadow-xl z-20">
@@ -35,7 +43,7 @@ const Sidebar = () => {
       </div>
 
       {/* Navigation Menu */}
-      <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
+      <nav className="flex-1 px-4 flex flex-col gap-2 overflow-y-auto">
         {menuItems.map((item, index) => {
           const isActive = location.pathname === item.path;
           return (
@@ -53,6 +61,17 @@ const Sidebar = () => {
             </Link>
           );
         })}
+
+        {/* Logout Button */}
+        <div className="mt-auto pt-4 pb-2">
+          <button
+            onClick={handleLogout}
+            className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-blue-100 transition-colors hover:bg-red-500/20 hover:text-red-200"
+          >
+            <Logout />
+            <span className="font-medium">Đăng xuất</span>
+          </button>
+        </div>
       </nav>
 
       {/* Footer Area */}
