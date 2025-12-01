@@ -1,13 +1,16 @@
 import React from 'react';
 import { Home, Person, School, CalendarToday, Settings, Book } from '@mui/icons-material';
+import { Link, useLocation } from 'react-router-dom';
 
 const Sidebar = () => {
+  const location = useLocation();
+  
   const menuItems = [
-    { icon: <Home />, label: 'Trang Chủ', active: true },
-    { icon: <Person />, label: 'Thông Tin Sinh Viên', active: false },
-    { icon: <School />, label: 'Khóa Học Của Tôi', active: false },
-    { icon: <CalendarToday />, label: 'Lịch học', active: false },
-    { icon: <Settings />, label: 'Cài Đặt', active: false },
+    { icon: <Home />, label: 'Trang Chủ', path: '/' },
+    { icon: <Person />, label: 'Thông Tin Sinh Viên', path: '/profile' },
+    { icon: <School />, label: 'Khóa Học Của Tôi', path: '/my-courses' },
+    { icon: <CalendarToday />, label: 'Lịch học', path: '/schedule' },
+    { icon: <Settings />, label: 'Cài Đặt', path: '/settings' },
   ];
 
   return (
@@ -31,19 +34,23 @@ const Sidebar = () => {
 
       {/* Navigation Menu */}
       <nav className="flex-1 px-4 space-y-2 overflow-y-auto">
-        {menuItems.map((item, index) => (
-          <div
-            key={index}
-            className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 ${
-              item.active
-                ? 'bg-white text-blue-700 shadow-md font-semibold translate-x-1'
-                : 'hover:bg-blue-600 text-blue-100 hover:text-white hover:translate-x-1'
-            }`}
-          >
-            {item.icon}
-            <span className="font-medium">{item.label}</span>
-          </div>
-        ))}
+        {menuItems.map((item, index) => {
+          const isActive = location.pathname === item.path;
+          return (
+            <Link
+              to={item.path}
+              key={index}
+              className={`flex items-center gap-3 px-4 py-3 rounded-xl cursor-pointer transition-all duration-200 ${
+                isActive
+                  ? 'bg-white text-blue-700 shadow-md font-semibold translate-x-1'
+                  : 'hover:bg-blue-600 text-blue-100 hover:text-white hover:translate-x-1'
+              }`}
+            >
+              {item.icon}
+              <span className="font-medium">{item.label}</span>
+            </Link>
+          );
+        })}
       </nav>
 
       {/* Footer Area */}

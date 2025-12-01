@@ -1,5 +1,6 @@
 import React from 'react';
 import { Menu, Search, Notifications, ChatBubbleOutline } from '@mui/icons-material';
+import { Link } from 'react-router-dom';
 
 const Header = () => {
   return (
@@ -29,9 +30,9 @@ const Header = () => {
           <Notifications fontSize="small" />
           <span className="absolute top-2 right-2.5 w-2 h-2 bg-red-500 rounded-full border border-white"></span>
         </button>
-        <button className="p-2.5 rounded-full bg-gray-50 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all">
+        <Link to="/chat" className="p-2.5 rounded-full bg-gray-50 text-gray-600 hover:bg-blue-50 hover:text-blue-600 transition-all">
           <ChatBubbleOutline fontSize="small" />
-        </button>
+        </Link>
       </div>
     </header>
   );
